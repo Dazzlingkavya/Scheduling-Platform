@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable.");
+  throw new Error("MONGODB_URI is not defined");
 }
 
 declare global {
@@ -17,7 +17,7 @@ declare global {
 
 const cached = global.mongooseCache ?? {
   conn: null,
-  promise: null
+  promise: null,
 };
 
 global.mongooseCache = cached;
@@ -28,8 +28,8 @@ export async function connectToDatabase() {
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
-      bufferCommands: false
+    cached.promise = mongoose.connect(MONGODB_URI as string, {
+      bufferCommands: false,
     });
   }
 
