@@ -9,7 +9,7 @@ import User, { type UserDocument } from "@/models/User";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) {
-  throw new Error("Please define the JWT_SECRET environment variable.");
+  throw new Error("JWT_SECRET is not defined");
 }
 
 export const AUTH_COOKIE_NAME = "calendlite_token";
@@ -21,13 +21,13 @@ type SessionPayload = {
 };
 
 export function signSessionToken(payload: SessionPayload) {
-  return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: "7d"
+  return jwt.sign(payload, JWT_SECRET as string, {
+    expiresIn: "7d",
   });
 }
 
 export function verifySessionToken(token: string) {
-  return jwt.verify(token, JWT_SECRET) as SessionPayload;
+  return jwt.verify(token, JWT_SECRET as string) as SessionPayload;
 }
 
 export function getTokenFromRequest(request: NextRequest) {
